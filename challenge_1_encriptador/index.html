@@ -1,0 +1,149 @@
+
+<script>
+	let	ce = "enter"
+    let ci = "imes"
+    let ca = "ai"
+    let co = "ober"
+    let cu = "ufat"
+    function verifycaCadena(accion){
+    	nvalida = 0
+	  	ctexto = document.getElementById("texto").value;
+	  	const regxs = {
+	    "minuscula": /^[a-z ]+$/,
+	    "mayuscula": /^[A-Z]+$/,
+	    "numeros":/^[0-9]+$/,
+	    "tildes": /^[À-ÿ]+$/,
+	    "combinado": /^[A-Za-z0-9]+$/
+		}
+		 
+		if (regxs.tildes.test(ctexto)) nvalida = nvalida + 1;
+		if (regxs.mayuscula.test(ctexto)) nvalida = nvalida + 1;
+
+		if (nvalida == 0){
+			if (accion==1){
+		  		encriptar()
+		  	}else{
+		  		desencriptar()
+		  	}
+		}else{
+			alert("Texto No Valido, revisar mayusculas o tildes");
+			document.getElementById("msg").value = ""
+		}
+    }
+    function encriptar(){  
+    	let ctexto = document.getElementById("texto").value;
+    	
+    	var cmsg_salida = ""
+		
+		for(i=0; i<ctexto.length; i++) {
+			var cletra = ctexto.charAt(i);
+			switch (cletra) {
+			  case "a":
+			  	cmsg_salida = cmsg_salida + cletra.replace("a",ca);
+			    break;
+			  case "e":
+			    cmsg_salida = cmsg_salida + cletra.replace("e",ce);
+			    break;
+			  case "i":
+			    cmsg_salida = cmsg_salida + cletra.replace("i",ci);
+			    break;
+			  case "o":
+			    cmsg_salida = cmsg_salida + cletra.replace("o",co);
+			    break;
+			  case "u":
+			    cmsg_salida = cmsg_salida + cletra.replace("u",cu);
+			    break;
+			  default:
+			    cmsg_salida = cmsg_salida + cletra;
+			    break;
+			}
+		}
+		if (cmsg_salida.length == 0){
+			document.getElementById("textSalida").textContent = "";
+			document.getElementById("textSalida").style.display = "none";
+			document.querySelector('#msg').textContent = document.getElementById("textSalida").innerText;
+			document.getElementById("img_inicio").style.display = "block";
+			document.getElementById("btncopy").style.display = "none" ;
+
+
+		}else{
+			document.getElementById("textSalida").textContent = cmsg_salida;
+			document.getElementById("textSalida").style.display = "block" ;
+			document.getElementById("img_inicio").style.display = "none" ;
+			document.getElementById("btncopy").style.display = "block" ;
+			document.querySelector('#msg').textContent = document.getElementById("textSalida").innerText;
+			document.querySelector('#nada').textContent = "";
+		}
+    }
+    function desencriptar(){
+    	let ctexto = document.getElementById("texto").value;
+
+    	var cmsg_salida = ctexto 
+		
+		cmsg_salida = cmsg_salida.replace(new RegExp(ca,"g") ,"a");
+		cmsg_salida = cmsg_salida.replace(new RegExp(ce,"g") ,"e");
+		cmsg_salida = cmsg_salida.replace(new RegExp(ci,"g") ,"i");
+		cmsg_salida = cmsg_salida.replace(new RegExp(co,"g") ,"o");
+		cmsg_salida = cmsg_salida.replace(new RegExp(cu,"g") ,"u");
+
+		document.getElementById("msg").value = cmsg_salida;
+		document.getElementById("img_inicio").style.display = "none"; 
+		document.getElementById("btncopy").style.display = "block" ;
+    }
+    function copiar(){
+    	
+		document.getElementById("msg").style.display = "block";
+    	var ctexto = document.getElementById("msg");
+    	ctexto.select();
+    	ctexto.setSelectionRange(0,99999);
+    	document.execCommand('copy');
+    	ctexto.setSelectionRange(0,0);
+    	document.getElementById("msg").style.display = "none";
+
+    }
+ </script>
+<html>
+	<head>
+		<LINK REL=StyleSheet HREF="style.css" TYPE="text/css">
+		<script src="script.js"></script>
+	</head>
+	<body>
+		<div id="content_body">
+			<div class="logo" id="logo">
+				<img src="img_vector/logo.png">
+			</div>
+			<div class="">
+				<textarea placeholder="Ingrese el texto aqui." class="text_proc" name="text_proceso" id="texto" ></textarea>
+			</div>
+			
+			<div id="botones">
+				<div class="regla">
+					<img src="img_vector/exclamacion_circle.png">
+					<label>Solo letras minúsculas y sin acentos</label>
+				</div>
+				<button name="aceptar" class="btnAceptar" onclick="verifycaCadena(1);">Encriptar</button>
+				<button  name="desencriptar" class="btndesencriptar" onclick="verifycaCadena(2);">Desencriptar</button>
+			</div>
+
+			<div class="output" id="output">
+				
+				<!--textarea type="text" name="msg" class="mensaje_salida" id="msg" readonly="true" style="display: none;"></textarea-->
+				<!--div  class="mensaje_salida" contenteditable style="display: none;"  id="msg"  name="msg"></div-->
+				<div  id="textSalida" style="display: none;" oninput="document.querySelector('#msg').textContent = this.innerText"></div>
+				<textarea type="text" name="msg" class="mensaje_salida" id="msg"  style="display: none;"></textarea>
+				
+				<div class="img_inicio" id="img_inicio">
+					<img class="v1" src="img_vector/Muneco.png">
+					<div class="mensaje_inicial">
+						<label class="l1">Ningún mensaje fue encontrado</label>
+						<label class="l2">Ingresa el texto que desees encriptar o desencriptar.</label>
+					</div>
+				</div> 	
+				<div id="nada"><br/><br/><br/><br/><br/></div>
+				
+				<button style="display: none;" id="btncopy" class="btncopiar" onclick="copiar();">Copiar</button>
+			
+			</div>
+		</div>
+	</body>
+</html>
